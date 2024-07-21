@@ -2,7 +2,114 @@
 <html>
     <body>
         <script>
+
+            let humanScore = 0;
+            let computerScore = 0;
             
+            function generateRandomNum() {
+                return Math.random();
+            }
+
+            function getComputerChoice() {
+                randomNum = generateRandomNum();
+                if (randomNum <= 0.33) {
+                    return "rock";
+                }
+                else if (randomNum <= 0.66) {
+                    return "paper";
+                }
+                else {
+                    return "scissors";
+                }
+            }
+
+            function getHumanChoice() {
+                input = prompt("Rock, Paper or Scissors?");
+                return input.toLowerCase();
+            }
+
+            function playRound(compChoice, userInput) {
+                let win = undefined;
+
+                // Handles Draw
+                if (userInput == "rock" || userInput == "paper" || userInput == "scissors") {
+                    // User Chooses Rock
+                    if (userInput == "rock") {
+                        if (compChoice == "paper") {
+                            win = false;
+                        }
+                        else if (compChoice == "scissors") {
+                            win = true;
+                        }
+                    }
+
+                    // User Chooses Paper
+                    else if (userInput == "paper") {
+                        if (compChoice == "scissors") {
+                            win = false;
+                        }
+                        else if (compChoice == "rock") {
+                            win = true;
+                        }
+                    }
+
+                    // User Chooses Scissors
+                    else if (userInput == "scissors") {
+                        if (compChoice == "rock") {
+                            win = false;
+                        }
+                        else if (compChoice == "paper") {
+                            win = true;
+                        }
+                    }
+
+                    if (win === true) {
+                        humanScore++
+                        console.log("You Won! " +userInput+ " beats " +compChoice+ ".");
+                    }
+                    else if (win === false) {
+                        computerScore++
+                        console.log("You Lost! " +compChoice+ " beats " +userInput+".");
+                    }
+                    else {
+                        console.log("You drew! Computer chose " +compChoice+ " too.");
+                    }
+                }
+                else {
+                    console.log("Retry, you didn't enter the rock, paper or scissors names");
+                }
+            }
+
+            function playGame() {
+                let rounds = 0;
+                let gameWin = undefined;
+
+                while (rounds <= 5) {
+                    computer = getComputerChoice();
+                    human = getHumanChoice();
+
+                    playRound(computer, human);
+
+                    rounds++;
+
+                    console.log(rounds);
+                    console.log("The current score is: \nComputer: " +computerScore+ "\nUser: " +humanScore);
+                }
+
+                humanScore > computerScore ? gameWin = true : gameWin = false;
+
+                if (gameWin) {
+                    console.log("You won.");
+                }
+                else if (gameWin === false) {
+                    console.log("You lost.");
+                }
+                else {
+                    console.log("You drew.");
+                }
+            }
+
+            playGame();
         </script>
     </body>
 </html>
