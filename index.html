@@ -1,10 +1,18 @@
 <!DOCTYPE html>
 <html>
     <body>
-        <script>
+        <button id="rock">Rock</button>;
+        <button id="paper">Paper</button>;
+        <button id="scissors">Scissors</button>;
 
+        <div id="container">
+            
+        </div>
+
+        <script>
             let humanScore = 0;
             let computerScore = 0;
+            let round = 0;
             
             function generateRandomNum() {
                 return Math.random();
@@ -23,15 +31,9 @@
                 }
             }
 
-            function getHumanChoice() {
-                input = prompt("Rock, Paper or Scissors?");
-                return input.toLowerCase();
-            }
-
             function playRound(compChoice, userInput) {
                 let win = undefined;
 
-                // Handles Draw
                 if (userInput == "rock" || userInput == "paper" || userInput == "scissors") {
                     // User Chooses Rock
                     if (userInput == "rock") {
@@ -63,53 +65,73 @@
                         }
                     }
 
-                    if (win === true) {
-                        humanScore++
-                        console.log("You Won! " +userInput+ " beats " +compChoice+ ".");
+                    displayWin(win, userInput, compChoice);
+                }
+            }
+
+            const message = document.createElement("div");
+
+            function displayWin(win, user, comp) {
+                if (win === true) {
+                    humanScore++
+                    message.textContent = "You Won! " +user+ " beats " +comp+ ".";
+                }
+                else if (win === false) {
+                    computerScore++
+                    message.textContent = "You Lost! " +comp+ " beats " +user+".";
+                }
+                else {
+                    message.textContent = "You drew! Computer chose " +comp+ " too.";
+                }
+
+                container.appendChild(message);
+            }
+
+            const container = document.querySelector("#container");
+
+            const roundCount = document.createElement("div");
+            container.appendChild(roundCount);
+
+            const scoreCount = document.createElement("div");
+            container.appendChild(scoreCount);
+            
+            document.addEventListener("click", (event) => {
+                const target = event.target;
+
+                if (target.tagName === "BUTTON" && round < 5) {
+                    const computer = getComputerChoice();
+
+                    switch(target.id) {
+                        case "rock":
+                            playRound(computer, "rock");
+                            round++
+                            break;
+                        case "paper":
+                            playRound(computer, "paper");
+                            round++
+                            break;
+                        case "scissors":
+                            playRound(computer, "scissors");
+                            round++
+                            break;
                     }
-                    else if (win === false) {
-                        computerScore++
-                        console.log("You Lost! " +compChoice+ " beats " +userInput+".");
+                }
+                if (target.tagName === "BUTTON" && round >= 5) {
+                    if (humanScore > computerScore) {
+                        message.textContent = "Human's Win!";
+                    }
+                    else if (humanScore < computerScore) {
+                        message.textContent = "Computer's Win";
                     }
                     else {
-                        console.log("You drew! Computer chose " +compChoice+ " too.");
+                        message.textContent = "Draw :(";
                     }
                 }
-                else {
-                    console.log("Retry, you didn't enter the rock, paper or scissors names");
-                }
-            }
 
-            function playGame() {
-                let rounds = 0;
-                let gameWin = undefined;
+                roundCount.textContent = round;
+                scoreCount.textContent = "Human: "+humanScore+ " Computer: "+computerScore;
+            });
 
-                while (rounds <= 5) {
-                    computer = getComputerChoice();
-                    human = getHumanChoice();
-
-                    playRound(computer, human);
-
-                    rounds++;
-
-                    console.log(rounds);
-                    console.log("The current score is: \nComputer: " +computerScore+ "\nUser: " +humanScore);
-                }
-
-                humanScore > computerScore ? gameWin = true : gameWin = false;
-
-                if (gameWin) {
-                    console.log("You won.");
-                }
-                else if (gameWin === false) {
-                    console.log("You lost.");
-                }
-                else {
-                    console.log("You drew.");
-                }
-            }
-
-            playGame();
         </script>
     </body>
 </html>
